@@ -2,7 +2,7 @@
 
 ## Why
 
-When you're AFK or typically miss the whisper message from the POE Trade mate, it's shame sometimes. With this tool, you'll never miss the POE Trade whisper message unless you're not using Telegram.
+When you are an AFK or usually miss a whispering message from a POE trade mate, sometimes it's a shame. With this tool, you'll never miss a POE Trade whisper message if you use Telegram.
 
 ## How to install
 
