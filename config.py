@@ -1,7 +1,7 @@
 import logging
 import sys
 import configparser
-from typing import Set, TypedDict
+from typing import Set, TypedDict, Optional
 
 
 logger = logging.getLogger(__name__)
@@ -14,6 +14,7 @@ class AppConfig(TypedDict):
     telegram_bot_token: str
     telegram_user_id: str
     dir_username: str
+    log_path: Optional[str]
     observer_cooldown_secs: float
 
 
@@ -44,12 +45,13 @@ def init_app_config() -> AppConfig:
             config["DEFAULT"]["ObserverCooldownSecs"] or DEFAULT_OBSERVER_COOLDOWN_SECS
         )
 
-        log_path = config["directories"]["LogPath"]
+        log_path = config["directories"]["LogPath"] or None
 
         return AppConfig(
             telegram_bot_token=telegram_bot_token,
             telegram_user_id=telegram_user_id,
             dir_username=dir_username,
+            log_path=log_path,
             observer_cooldown_secs=observer_cooldown_secs,
         )
     except ValueError as e:

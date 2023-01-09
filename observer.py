@@ -12,12 +12,12 @@ class PoeObserver:
     Reads POE Client logs and parses incoming messages from it
     """
 
-    def __init__(self, username: str, custom_log_path: Optional[str]):
+    def __init__(self, username: str, custom_log_path: Optional[str] = None):
         self.file = None
         self.logger = logger
         self.username = username
 
-        is_windows = platform.system()
+        is_windows = platform.system().lower() == 'windows'
         if custom_log_path:
             self.log_path = custom_log_path
         else:

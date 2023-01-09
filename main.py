@@ -52,7 +52,7 @@ def run_observer_loop(observer: PoeObserver, app_config: AppConfig) -> None:
 def main() -> None:
     app_config = init_app_config()
 
-    observer = PoeObserver(app_config["dir_username"])
+    observer = PoeObserver(app_config["dir_username"], app_config["log_path"])
     observer.open_log_file()
 
     run_observer_loop(observer, app_config)
