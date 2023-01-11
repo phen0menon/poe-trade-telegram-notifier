@@ -6,7 +6,9 @@ from typing import Set, TypedDict, Optional
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_OBSERVER_COOLDOWN_SECS = 0.5
+DEFAULT_WHISPERS_NOTIFIER_INTERVAL = 0.5
+DEFAULT_ACTIVITY_OBSERVER_INTERVAL = 1
+
 CONFIG_REQUIRED_SECTIONS: Set[str] = {"DEFAULT", "telegram", "directories"}
 
 
@@ -15,7 +17,9 @@ class AppConfig(TypedDict):
     telegram_user_id: str
     dir_username: str
     log_path: Optional[str]
-    observer_cooldown_secs: float
+
+    whispers_notifier_interval: int
+    activity_observer_interval: int
 
 
 def init_app_config() -> AppConfig:
@@ -41,10 +45,6 @@ def init_app_config() -> AppConfig:
                 "Missing directories.DirectoryUsername variable in ini-config"
             )
 
-        observer_cooldown_secs = float(
-            config["DEFAULT"]["ObserverCooldownSecs"] or DEFAULT_OBSERVER_COOLDOWN_SECS
-        )
-
         log_path = config["directories"]["LogPath"] or None
 
         return AppConfig(
@@ -52,10 +52,11 @@ def init_app_config() -> AppConfig:
             telegram_user_id=telegram_user_id,
             dir_username=dir_username,
             log_path=log_path,
-            observer_cooldown_secs=observer_cooldown_secs,
+            whispers_notifier_interval=DEFAULT_WHISPERS_NOTIFIER_INTERVAL,
+            activity_observer_interval=DEFAULT_ACTIVITY_OBSERVER_INTERVAL,
         )
     except ValueError as e:
         logging.error(str(e))
         sys.exit()
     except Exception as e:
-        logging.warning("Unhandled error in init_configs: [%s]", str(e))
+        logging.warning(f"Unhandled error in init_configs: {str(e)}")
