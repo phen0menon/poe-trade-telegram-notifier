@@ -55,7 +55,10 @@ class PoeObserver:
 
         for line in self.file:
             if WHISPER_MESSAGE_REGEX.search(line):
-                messages.append(WHISPER_MESSAGE_REGEX.findall(line)[0])
+                line = WHISPER_MESSAGE_REGEX.findall(line)[0]
+                # TODO: fix for i18n
+                msg = line.split("(stash")[0]
+                messages.append(msg)
             elif AFK_MODE_NOTIFICATION_REGEX.search(line):
                 afk_mode_details = AFK_MODE_NOTIFICATION_REGEX.findall(line)[0]
                 self.is_client_afk = "ON" in afk_mode_details

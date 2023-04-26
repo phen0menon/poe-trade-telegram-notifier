@@ -58,6 +58,7 @@ async def run_whispers_notifier(
             f"run_whispers_notifier: generic error - {str(e)}; continuing loop execution"
         )
         time.sleep(app_config["whispers_notifier_interval"])
+        await run_whispers_notifier(observer, app_config, should_always_notify)
     except KeyboardInterrupt:
         logger.info("Program exited")
 
@@ -81,8 +82,8 @@ async def main() -> None:
     observer.open_log_file()
 
     coroutines = [
-        asyncio.create_task(run_whispers_notifier(observer, app_config)),
-        asyncio.create_task(run_activity_observer(observer, app_config)),
+        run_whispers_notifier(observer, app_config),
+        run_activity_observer(observer, app_config),
     ]
 
     await asyncio.gather(*coroutines)

@@ -6,8 +6,8 @@ from typing import Set, TypedDict, Optional
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_WHISPERS_NOTIFIER_INTERVAL = 0.5
-DEFAULT_ACTIVITY_OBSERVER_INTERVAL = 1
+DEFAULT_WHISPERS_NOTIFIER_INTERVAL = 2
+DEFAULT_ACTIVITY_OBSERVER_INTERVAL = 2
 
 CONFIG_REQUIRED_SECTIONS: Set[str] = {"DEFAULT", "telegram", "directories"}
 
