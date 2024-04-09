@@ -3,9 +3,9 @@
 
 ## Why
 
-Since there is no auction-like mechanism in Path of Exile, trading system becomes a complex thing: you always have to be nearby your PC to check trade offers. 
+In Path of Exile, the absence of an auction-like mechanism complicates the trading system. It requires players to constantly monitor trade offers while being near their PC.
 
-This application solves one major problem: when you are an AFK, for example, you're surfing TikTok laying on the couch and hear the whisper message from your PC and you want to check what trade offer you just received, so you instantly get the Telegram notification from your bot and observe the whisper contents! Moreover, you can reply to those whispers via Telegram Messenger!
+This application addresses a key issue: when players are away from their PC, such as browsing TikTok on the couch, they can receive whisper messages from PoE directly to their Telegram account. This means they can instantly view incoming trade offers without needing to return to their PC. Additionally, players can respond to these whispers directly through Telegram Messenger. This feature is particularly useful for avoiding interruptions, like being pulled away from TikTok for a low-value trade offer (every PoE player will agree that being distracted by 1c trading is an unproductive activity).
 
 ## How to install
 
