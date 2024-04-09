@@ -6,7 +6,10 @@
 - 📱 <b>Productivity</b>. Every trade offer you receive is forwarded to you in Telegram
 - 🛡️ <b>Safety</b>. Application doesn't inject anything in Path of Exile, thus you won't be banned
 - 🏃 <b>Flexibility</b>. You can reply to every trade offer via Telegram messenger just by replying to received message!
-  
+
+Demonstration video:
+
+https://github.com/phen0menon/poe-trade-telegram-notifier/assets/15520523/184d6102-3254-47aa-a111-80a43cf8e129
 
 ## Why
 
