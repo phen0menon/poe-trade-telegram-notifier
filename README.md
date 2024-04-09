@@ -3,9 +3,9 @@
 
 ## Why
 
-Since there is no auction-like mechanism in Path of Exile, trading system becomes a complex thing: you always have to be near your PC to accept trade offers. 
+Since there is no auction-like mechanism in Path of Exile, trading system becomes a complex thing: you always have to be nearby your PC to check trade offers. 
 
-This application solves one major problem: when you are an AFK (but with your phone at a hand), you're always aware of what trade offers are coming to you via whispers. Moreover, you can reply to them via Telegram Messenger!
+This application solves one major problem: when you are an AFK, for example, you're surfing TikTok laying on the couch and hear the whisper message from your PC and you want to check what trade offer you just received, so you instantly get the Telegram notification from your bot and observe the whisper contents! Moreover, you can reply to those whispers via Telegram Messenger!
 
 ## How to install
 
