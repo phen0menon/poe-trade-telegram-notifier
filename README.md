@@ -12,7 +12,7 @@ This application solves one major problem: when you are an AFK (but with your ph
 ### Prerequisites
 
 1. System: Windows, MacOS not tested 
-2. Python >= 3.8
+2. Python >= 3.8. You can download Python here: https://www.python.org/downloads/
 
 ### Running application
 
