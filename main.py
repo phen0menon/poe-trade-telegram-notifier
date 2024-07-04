@@ -7,10 +7,17 @@ import pyperclip
 
 from config import AppConfig, init_app_config
 from observer import PoeObserver
-from telegram_api import (GetTelegramMessagesUpdate, get_telegram_messages,
-                          send_telegram_message)
-from utils import (extract_name_from_whisper, focus_poe_window,
-                   is_poe_window_focused, send_whisper_reply_from_clipboard)
+from telegram_api import (
+    GetTelegramMessagesUpdate,
+    get_telegram_messages,
+    send_telegram_message,
+)
+from utils import (
+    extract_name_from_whisper,
+    focus_poe_window,
+    is_poe_window_focused,
+    send_whisper_reply_from_clipboard,
+)
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -61,50 +68,55 @@ async def run_whispers_notifier(
                         )
             await asyncio.sleep(app_config["whispers_notifier_interval"])
     except Exception as e:
-        logger.error(
-            f"run_whispers_notifier: generic error - {str(e)}; continuing loop execution"
-        )
+        logger.error(f"run_whispers_notifier: {str(e)}")
         time.sleep(app_config["whispers_notifier_interval"])
         await run_whispers_notifier(observer, app_config, should_always_notify)
     except KeyboardInterrupt:
         logger.info("Program exited")
 
 
-async def run_telegram_reply_observer(app_config: AppConfig, last_read_message_offset: int = None) -> None:
+async def run_telegram_reply_observer(
+    app_config: AppConfig, last_read_message_offset: int = None
+) -> None:
     try:
         telegram_chat_id = app_config["telegram_user_id"]
         telegram_bot_id = app_config["telegram_bot_token"]
 
         while True:
-            updates: List[GetTelegramMessagesUpdate]  = get_telegram_messages(chat_id=telegram_bot_id, bot_id=telegram_bot_id, offset=last_read_message_offset)
+            updates: List[GetTelegramMessagesUpdate] = get_telegram_messages(
+                chat_id=telegram_bot_id,
+                bot_id=telegram_bot_id,
+                offset=last_read_message_offset,
+            )
 
             for update in updates:
-                message = update.get('message')
-                chat_id = message['chat']['id']
+                message = update.get("message")
+                chat_id = message["chat"]["id"]
+
+                last_read_message_offset = update.get("update_id") + 1
 
                 # Skip processing messages in other chats
-                if str(chat_id) != telegram_chat_id or not message.get('reply_to_message'):
+                if str(chat_id) != telegram_chat_id or not message.get(
+                    "reply_to_message"
+                ):
                     continue
 
-                original_message_text = message['reply_to_message']['text']
-                whisper_author = extract_name_from_whisper(original_message_text)
-                reply_message_text = message['text']
+                logger.info(f"[{message['message_id']}] Received a reply message from chat_id={chat_id}")
 
-                whisper_reply = f'@{whisper_author} {reply_message_text}'
+                whisper_author = extract_name_from_whisper(message["reply_to_message"]["text"])
+                whisper_reply = f"@{whisper_author} {message['text']}"
                 pyperclip.copy(whisper_reply)
 
                 if not is_poe_window_focused():
+                    logger.info(f"[{message['message_id']}] Focusing window for a reply to {whisper_author}")
                     focus_poe_window()
-                
-                send_whisper_reply_from_clipboard()
 
-                last_read_message_offset = update.get('update_id') + 1
+                send_whisper_reply_from_clipboard()
+                logger.info(f"[{message['message_id']}] reply sent to {whisper_author}")
 
             await asyncio.sleep(app_config["whispers_notifier_interval"])
     except Exception as e:
-        logger.error(
-            f"run_telegram_reply_observer: generic error - {str(e)}; continuing loop execution"
-        )
+        logger.error(f"run_telegram_reply_observer: {str(e)}")
         time.sleep(app_config["whispers_notifier_interval"])
         await run_telegram_reply_observer(app_config, last_read_message_offset)
     except KeyboardInterrupt:
@@ -132,7 +144,7 @@ async def main() -> None:
     coroutines = [
         run_whispers_notifier(observer, app_config, True),
         run_activity_observer(observer, app_config),
-        run_telegram_reply_observer(app_config)
+        run_telegram_reply_observer(app_config),
     ]
 
     await asyncio.gather(*coroutines)

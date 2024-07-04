@@ -47,21 +47,21 @@ def is_poe_window_focused() -> bool:
 
 def focus_poe_window() -> None:
     platf = sys.platform.lower()
-    if platf in WINDOWS_PLATFORMS:
-        import win32gui
 
-        hwnd = win32gui.FindWindowEx(0, 0, 0, POE_WINDOW_NAME)
-        win32gui.SetForegroundWindow(hwnd)
-    else:
-        raise Exception("NotImplemented: focus_poe_window for other than Windows OS")
+    if platf not in WINDOWS_PLATFORMS:
+        raise Exception("NotImplemented: focus_poe_window works on Windows only")
+
+    import win32gui
+    import win32con
+
+    hwnd = win32gui.FindWindowEx(0, 0, 0, POE_WINDOW_NAME)
+    win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
+    win32gui.SetForegroundWindow(hwnd)
 
 
 def extract_name_from_whisper(whisper: str) -> str:
-    parts = whisper.split(":")
-    if len(parts) > 1:
-        name = parts[0].split()[1].strip()
-        return name
-    return whisper
+    part_with_name = whisper.split(":")[0]
+    return part_with_name.split()[-1]
 
 
 def send_whisper_reply_from_clipboard() -> None:
