@@ -75,3 +75,7 @@ Other fields
 Future requests:
   - [ ] TBD: Filter for stashes 
   - [ ] TBD: Filter for currency
+
+## License
+
+© Rolan Ibragimov (phen0menon) 2024. Licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License.
