@@ -14,10 +14,9 @@ from telegram_api import (
 )
 from utils import (
     extract_name_from_whisper,
-    focus_poe_window,
-    is_poe_window_focused,
     send_whisper_reply_from_clipboard,
 )
+from window_manager import WindowManager
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -76,7 +75,9 @@ async def run_whispers_notifier(
 
 
 async def run_telegram_reply_observer(
-    app_config: AppConfig, last_read_message_offset: int = None
+    app_config: AppConfig,
+    window_manager: WindowManager,
+    last_read_message_offset: int = None,
 ) -> None:
     try:
         telegram_chat_id = app_config["telegram_user_id"]
@@ -101,15 +102,21 @@ async def run_telegram_reply_observer(
                 ):
                     continue
 
-                logger.info(f"[{message['message_id']}] Received a reply message from chat_id={chat_id}")
+                logger.info(
+                    f"[{message['message_id']}] Received a reply message from chat_id={chat_id}"
+                )
 
-                whisper_author = extract_name_from_whisper(message["reply_to_message"]["text"])
+                whisper_author = extract_name_from_whisper(
+                    message["reply_to_message"]["text"]
+                )
                 whisper_reply = f"@{whisper_author} {message['text']}"
                 pyperclip.copy(whisper_reply)
 
-                if not is_poe_window_focused():
-                    logger.info(f"[{message['message_id']}] Focusing window for a reply to {whisper_author}")
-                    focus_poe_window()
+                if not window_manager.is_poe_window_focused():
+                    logger.info(
+                        f"[{message['message_id']}] Focusing window for a reply to {whisper_author}"
+                    )
+                    window_manager.set_foreground()
 
                 send_whisper_reply_from_clipboard()
                 logger.info(f"[{message['message_id']}] reply sent to {whisper_author}")
@@ -118,21 +125,23 @@ async def run_telegram_reply_observer(
     except Exception as e:
         logger.error(f"run_telegram_reply_observer: {str(e)}")
         time.sleep(app_config["whispers_notifier_interval"])
-        await run_telegram_reply_observer(app_config, last_read_message_offset)
+        await run_telegram_reply_observer(
+            app_config, window_manager, last_read_message_offset
+        )
     except KeyboardInterrupt:
         logger.info("Program exited")
 
 
-async def run_activity_observer(observer: PoeObserver, app_config: AppConfig) -> None:
+async def run_activity_observer(observer: PoeObserver, app_config: AppConfig, window_manager: WindowManager) -> None:
     try:
         while True:
-            is_window_focused = is_poe_window_focused()
+            is_window_focused = window_manager.is_poe_window_focused()
             observer.set_is_client_focused(is_window_focused)
             await asyncio.sleep(app_config["whispers_notifier_interval"])
     except ImportError as e:
         raise e
     except Exception as e:
-        logger.error(f"run_activity_observer: generic error - {str(e)}")
+        logger.error(f"run_activity_observer: {str(e)}")
 
 
 async def main() -> None:
@@ -141,10 +150,12 @@ async def main() -> None:
     observer = PoeObserver(app_config["log_path"])
     observer.open_log_file()
 
+    window_manager = WindowManager()
+
     coroutines = [
         run_whispers_notifier(observer, app_config, True),
-        run_activity_observer(observer, app_config),
-        run_telegram_reply_observer(app_config),
+        run_activity_observer(observer, app_config, window_manager),
+        run_telegram_reply_observer(app_config, window_manager),
     ]
 
     await asyncio.gather(*coroutines)
