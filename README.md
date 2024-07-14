@@ -13,11 +13,7 @@ https://github.com/phen0menon/poe-trade-telegram-notifier/assets/15520523/184d61
 
 ## Why
 
-In Path of Exile, the absence of an auction-like mechanism complicates the trading system. It requires players to constantly monitor trade offers while being near their PC.
-
-This application addresses a key issue: when players are away from their PC, such as browsing TikTok on the couch, they can receive whisper messages from PoE directly to their Telegram account. 
-
-This means a player can instantly view incoming trade offers without needing to return to their PC. Additionally, players can respond to these whispers directly through Telegram Messenger. This feature is particularly useful for avoiding interruptions, like being pulled away from TikTok for a low-value trade offer (every PoE player will agree that being distracted by 1c trading is an unproductive activity).
+In Path of Exile, the lack of an auction system complicates trading, requiring players to monitor trade offers near their PC. This application solves a key issue: when away from their PC, players can receive PoE whisper messages on their Telegram account. This allows them to view and respond to trade offers instantly via Telegram, avoiding interruptions like being pulled away from TikTok for low-value trades (every PoE player knows 1c trading is unproductive).
 
 #### How it works
 
